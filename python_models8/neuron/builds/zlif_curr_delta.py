@@ -7,8 +7,8 @@ from spynnaker.pyNN.models.neuron.synapse_types import SynapseTypeDelta
 from spynnaker.pyNN.models.neuron.threshold_types import ThresholdTypeStatic
 
 # Additional components
-from python_models8.neuron.neuron_models.neuron_model_zero_leak_integrate_and_fire import NeuronModelZeroLeakIntegrateAndFire
 from spynnaker.pyNN.models.defaults import default_initial_values
+from python_models8.neuron.neuron_models.zlif_curr_delta import ZLIFCurr
 
 
 class ZLIFCurrDelta(AbstractPyNNNeuronModelStandard):
@@ -20,8 +20,8 @@ class ZLIFCurrDelta(AbstractPyNNNeuronModelStandard):
             v_thresh=64.0, tau_refrac=0.0, i_offset=0.0, v=0.0,
             isyn_exc=0.0, isyn_inh=0.0):
 
-        neuron_model = NeuronModelZeroLeakIntegrateAndFire(
-            v, v_rest, cm, i_offset, v_reset, tau_refrac)
+        neuron_model = ZLIFCurr(
+            v, i_offset, v_reset)
         synapse_type = SynapseTypeDelta(isyn_exc, isyn_inh)
         input_type = InputTypeDelta()
         threshold_type = ThresholdTypeStatic(v_thresh)
