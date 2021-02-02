@@ -46,5 +46,86 @@ def test_ZLIFCurrDelta_live():
     plt.plot(np.squeeze(np.array(v_trace.segments[0].analogsignals)))
     plt.show()
 
+
+def test_ZLIFCurrDelta_voltage_clipping():
+
+    p.setup(time_scale_factor=1, timestep=1)
+
+    input = p.Population(1, p.SpikeSourceArray(list(range(0, 256, 1))))
+    pop = p.Population(1, ZLIFCurrDelta(v=0))
+
+    proj = p.Projection(input, pop, p.AllToAllConnector(), p.StaticSynapse(weight=1), receptor_type='inhibitory')
+
+    pop.record('v')
+
+    p.run(2560)
+
+    v_trace = pop.get_data('v')
+
+
+    p.end()
+
+    v_trace = np.array(v_trace.segments[0].analogsignals)
+    assert v_trace[-1] == -128
+
+
+def test_ZLIFCurrDelta_membrane_addition():
+
+    p.setup(time_scale_factor=1, timestep=1)
+
+    input = p.Population(2, p.SpikeSourceArray([[10], [20]]))
+    pop = p.Population(1, ZLIFCurrDelta(v=0))
+
+    proj = p.Projection(input, pop, p.FromListConnector([(0,0,10,0), (1,0,20,0)]), receptor_type='excitatory')
+
+    pop.record('v')
+
+    p.run(100)
+
+    v_trace = pop.get_data('v')
+
+
+    p.end()
+
+    v_trace = np.array(v_trace.segments[0].analogsignals)
+    assert v_trace[-1] == 30
+
+
+
+
+def test_ZLIFCurrDelta_threshold():
+
+    p.setup(time_scale_factor=1, timestep=1)
+
+    input = p.Population(1, p.SpikeSourceArray(list(range(0, 64, 1))))
+    pop = p.Population(1, ZLIFCurrDelta(v=0, v_thresh=64))
+
+    proj = p.Projection(input, pop, p.AllToAllConnector(), p.StaticSynapse(weight=1), receptor_type='excitatory')
+
+    pop.record('v')
+
+    p.run(66)
+
+    v_trace = pop.get_data('v')
+
+
+    p.end()
+
+    v_trace = np.squeeze(np.array(v_trace.segments[0].analogsignals))
+
+    import matplotlib.pyplot as plt
+
+    plt.plot(v_trace)
+    plt.show()
+
+
+    assert v_trace[-1] == 0
+
+
+
+
+
 if __name__ == '__main__':
-    test_ZLIFCurrDelta_live()
+    test_ZLIFCurrDelta_voltage_clipping()
+    test_ZLIFCurrDelta_membrane_addition()
+    test_ZLIFCurrDelta_threshold()
