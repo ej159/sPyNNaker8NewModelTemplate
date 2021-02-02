@@ -29,10 +29,10 @@ def test_ZLIFCurrDelta_live():
     '''Test to see if C code is giving the right answers from machine'''
     p.setup(time_scale_factor=1, timestep=1)
 
-    input = p.Population(1, p.SpikeSourceArray(list(range(0, 1000, 10))))
+    input = p.Population(1, p.SpikeSourceArray(list(range(0, 1000, 5))))
     pop = p.Population(1, ZLIFCurrDelta(v=1.0), {})
     
-    proj = p.Projection(input, pop, p.AllToAllConnector(), p.StaticSynapse(weight=1))
+    proj = p.Projection(input, pop, p.AllToAllConnector(), p.StaticSynapse(weight=1), receptor_type='inhibitory')
 
     pop.record('v')
 

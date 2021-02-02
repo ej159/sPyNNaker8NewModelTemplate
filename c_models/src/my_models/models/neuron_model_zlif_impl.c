@@ -32,8 +32,8 @@ void neuron_model_set_global_neuron_params(
 static inline void safe_input_add(
         neuron_t *neuron, int V_prev, input_t input_this_timestep) {
         // Does an overflow checking addition of input with clipping if input would underflow
-        if ((V_prev < 0) && (input_this_timestep < INT_MIN - V_prev)) {
-            neuron->V = INT_MIN;
+        if ((V_prev < 0) && (input_this_timestep < INT8_MIN - V_prev)) {
+            neuron->V = INT8_MIN;
         } else {
             neuron->V += input_this_timestep;
         }
