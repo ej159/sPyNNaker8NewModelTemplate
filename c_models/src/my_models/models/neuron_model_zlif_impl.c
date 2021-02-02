@@ -33,9 +33,9 @@ static inline void safe_input_add(
         neuron_t *neuron, int V_prev, input_t input_this_timestep) {
         // Does an overflow checking addition of input with clipping if input would underflow
         if ((V_prev < 0) && (input_this_timestep < INT_MIN - V_prev)) {
-            neuron->V_membrane = INT_MIN;
+            neuron->V = INT_MIN;
         } else {
-            neuron->V_membrane += input_this_timestep;
+            neuron->V += input_this_timestep;
         }
 }
 
@@ -63,26 +63,26 @@ state_t neuron_model_state_update(
             total_exc - total_inh + external_bias + neuron->I_offset;
 
     safe_input_add(
-        neuron, neuron->V_membrane, input_this_timestep);
+        neuron, neuron->V, input_this_timestep);
 
 
-    log_debug("TESTING TESTING V = %11.4k mv", neuron->V_membrane);
+    log_debug("TESTING TESTING V = %11.4k mv", neuron->V);
 
     // Return the state variable to be compared with the threshold value
     // to determine if the neuron has spikes (commonly the membrane voltage)
 
-    return neuron->V_membrane;
+    return neuron->V;
 }
 
 
 state_t neuron_model_get_membrane_voltage(const neuron_t *neuron) {
-    return neuron->V_membrane;
+    return neuron->V;
 }
 
 void neuron_model_has_spiked(neuron_t *restrict neuron) {
-    neuron->V_membrane = neuron->V_reset;
+    neuron->V = neuron->V_reset;
 }
 
 void neuron_model_print_state_variables(const neuron_t *neuron) {
-    log_debug("V = %11.4k mv", neuron->V_membrane);
+    log_debug("V = %11.4k mv", neuron->V);
 }

@@ -21,18 +21,17 @@
 #include <neuron/models/neuron_model.h>
 
 typedef struct neuron_t {
-    // TODO: Parameters - make sure these match with the Python code,
     // including the order of the variables when returned by
     // get_neural_parameters.
 
     // Variable-state parameters e.g. membrane voltage
-    int8_t V_membrane;
+    REAL V;
 
     //! post-spike reset membrane voltage [mV]
-    int8_t V_reset;
+    REAL V_reset;
 
     // offset current [nA]
-    int8_t I_offset;
+    REAL I_offset;
 
 } neuron_t;
 
