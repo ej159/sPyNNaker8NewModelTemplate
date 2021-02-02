@@ -16,8 +16,8 @@ class ZLIFCurrDelta(AbstractPyNNNeuronModelStandard):
     # Identify which of the values are state variables
     @default_initial_values({"v", "isyn_exc", "isyn_inh"})
     def __init__(
-            self, cm=1.0, v_rest=0.0, v_reset=0.0,
-            v_thresh=64.0, tau_refrac=0.0, i_offset=0.0, v=0.0,
+            self, v_reset=0,
+            v_thresh=64, i_offset=0.0, v=0,
             isyn_exc=0.0, isyn_inh=0.0):
 
         neuron_model = ZLIFCurr(
@@ -31,10 +31,10 @@ class ZLIFCurrDelta(AbstractPyNNNeuronModelStandard):
         super(ZLIFCurrDelta, self).__init__(
 
             # the model a name (shown in reports)
-            model_name="ZIFCurrDelta",
+            model_name="ZLIFCurrDelta",
 
             # the matching binary name
-            binary="ZIF_curr_delta.aplx",
+            binary="zlif_curr_delta.aplx",
 
             # the various model types
             neuron_model=neuron_model, input_type=input_type,
